@@ -4,27 +4,26 @@ using Api.Dtos;
 using Api.Querys.Implementations;
 using MongoDB.Driver;
 
-namespace Api.Services.Implementations
+namespace Api.Repositorys.Implementations
 {
-    public abstract class BaseService<E, D>
+    public class Repository<E> : IRepository<E>
         where E : BaseEntity
-        where D : BaseDto
     {
-        protected readonly IMongoCollection<E> Collection;
+        public IMongoCollection<E> Collection { get; init; }
 
-        public BaseService(BaseServiceParams baseParams)
+        public Repository(RepositoryParams baseParams)
         {
             Collection = baseParams.ServiceProvider.GetRequiredService<IDbContext>().GetCollection<E>();
         }
     }
 
-    public class BaseServiceParams
+    public class RepositoryParams
     {
         private readonly Lazy<IServiceProvider> _serviceProvider;
 
         public IServiceProvider ServiceProvider { get { return _serviceProvider.Value; } }
 
-        public BaseServiceParams(Lazy<IServiceProvider> serviceProvider)
+        public RepositoryParams(Lazy<IServiceProvider> serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

@@ -1,6 +1,8 @@
-﻿namespace Api.Services
+﻿using Api.Dtos.Persons;
+
+namespace Api.Services
 {
-    public interface IPersonService
+    public interface IPersonService : IService<PersonDto, NewPersonDto>
     {
     }
 }

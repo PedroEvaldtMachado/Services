@@ -3,6 +3,7 @@ using Api.Domain;
 using MongoDB.Driver;
 using Api.Domain.Implementations;
 using Api.Dtos;
+using Api.Mappers;
 using System.Collections.Immutable;
 using System.Collections.Generic;
 

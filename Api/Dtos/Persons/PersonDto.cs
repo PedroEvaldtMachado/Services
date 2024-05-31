@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Api.Infra.Enums;
 
 namespace Api.Dtos.Persons
 {
@@ -6,6 +6,19 @@ namespace Api.Dtos.Persons
     {
         public string? Name { get; set; }
 
-        public DateOnly Date { get; set; }
+        public string? Username { get; set; }
+
+        public DateTimeOffset RegisterDate { get; set; }
+
+        public Guid CountryId { get; set; }
+
+        public PersonType PersonType { get; set; }
+
+        public ICollection<PersonDetailDto> PersonDetails { get; set; }
+
+        public PersonDto()
+        {
+            PersonDetails = new List<PersonDetailDto>();
+        }
     }
 }

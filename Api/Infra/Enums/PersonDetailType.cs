@@ -3,8 +3,12 @@
     public enum PersonDetailType
     {
         None,
-        Identifier,
+        NationalRegistry,
+        RegionalRegistry,
+        MunicipalRegistry,
         Contact,
-
+        Photo,
+        Passport,
+        BirthDate
     }
 }

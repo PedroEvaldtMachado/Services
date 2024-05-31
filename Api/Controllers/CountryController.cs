@@ -1,10 +1,8 @@
 ﻿using Api.Dtos.Countrys;
+using Api.Infra;
 using Api.Querys;
-using Api.Querys.Implementations;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Api.Infra;
-using FluentResults;
 
 namespace Api.Controllers
 {
@@ -22,12 +20,20 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
         public async Task<IActionResult> Get(Guid id)
         {
             var dto = await _query.Value.GetById(id);
 
-            return dto.ToResult().ToCompleteResponse();
+            return dto.ToResultResponse();
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Search(string value)
+        {
+            var dto = await _query.Value.Search(value);
+
+            return dto.ToResultResponse();
         }
 
         [HttpGet]
@@ -36,7 +42,7 @@ namespace Api.Controllers
         {
             var dtos = await _query.Value.GetAll();
 
-            return dtos.ToResult().ToCompleteResponse();
+            return dtos.ToResultResponse();
         }
 
         [HttpPost]
@@ -51,6 +57,24 @@ namespace Api.Controllers
         public async Task<IActionResult> Delete(CountryDto dto)
         {
             var result = await _service.Value.Delete(dto);
+
+            return result.ToCompleteResponse();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AddObligation(ObligationDto dto)
+        {
+            var result = await _service.Value.AddObligation(dto);
+
+            return result.ToCompleteResponse();
+        }
+
+        [HttpDelete]
+        [Route("[action]")]
+        public async Task<IActionResult> RemoveObligation(ObligationDto dto)
+        {
+            var result = await _service.Value.RemoveObligation(dto);
 
             return result.ToCompleteResponse();
         }

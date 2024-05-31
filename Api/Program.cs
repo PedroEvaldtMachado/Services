@@ -2,6 +2,9 @@ using Api.Domain;
 using Api.Domain.Implementations;
 using Api.Dtos;
 using Api.Infra;
+using System.Resources;
+
+[assembly: NeutralResourcesLanguageAttribute("en")]
 
 var builder = WebApplication.CreateSlimBuilder(args);
 

@@ -7,6 +7,9 @@ using Api.Querys;
 using Api.Querys.Implementations;
 using Api.Services.Implementations;
 using Api.Services;
+using Api.Repositorys.Implementations;
+using Api.Repositorys;
+using Api.Domain.Entities.Persons;
 
 namespace Api.Infra
 {
@@ -17,14 +20,9 @@ namespace Api.Infra
             services.AddTransient(typeof(Lazy<>));
             services.AddScoped<IDbContext, DbContext>();
 
-            services.AddMappers();
             services.AddQuerys();
+            services.AddRepositories();
             services.AddServices();
-        }
-
-        private static void AddMappers(this IServiceCollection services)
-        {
-            //services.AddTransient<IMapper<Person, PersonDto>, PersonMapper>();
         }
 
         private static void AddQuerys(this IServiceCollection services)
@@ -33,13 +31,22 @@ namespace Api.Infra
             services.AddScoped(typeof(IQuery<,>), typeof(BaseQuery<,>));
             services.AddScoped<IPersonQuery, PersonQuery>();
             services.AddScoped<ICountryQuery, CountryQuery>();
+            services.AddScoped<IContracteeQuery, ContracteeQuery>();
         }
 
         private static void AddServices(this IServiceCollection services)
         {
-            services.AddScoped(typeof(BaseServiceParams));
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IContracteeService, ContracteeService>();
+            services.AddScoped<ICountryRules, CountryRules>();
+        }
+
+        private static void AddRepositories(this IServiceCollection services) 
+        {
+            services.AddScoped(typeof(RepositoryParams));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            //services.AddScoped(typeof(IRepository<Person>), typeof(Repository<Person>));
         }
     }
 }

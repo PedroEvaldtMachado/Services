@@ -1,14 +1,25 @@
-﻿using Api.Dtos;
-using FluentResults;
+﻿using FluentResults;
 using Microsoft.AspNetCore.Mvc;
+using Api.Mappers;
+using Api.Dtos;
 
 namespace Api.Infra
 {
     public static class ResponseExtensions
     {
+        public static ActionResult ToResultResponse<T>(this T? result)
+        {
+            return result.ToResult().ToResponse();
+        }
+
+        public static ActionResult ToResultCompleteResponse<T>(this T? result)
+        {
+            return result.ToResult().ToCompleteResponse();
+        }
+
         public static ActionResult ToResponse<T>(this IResult<T> result)
         {
-            var resultMapped = Mapper.Map(result);
+            var resultMapped = ConvertResultToDefault(result);
 
             if (result.IsSuccess)
             {
@@ -22,7 +33,8 @@ namespace Api.Infra
 
         public static ActionResult ToCompleteResponse<T>(this IResult<T> result)
         {
-            var resultMapped = Mapper.Map(result);
+
+            var resultMapped = ConvertResultToDefault(result);
 
             if (result.IsSuccess)
             {
@@ -46,6 +58,24 @@ namespace Api.Infra
             {
                 return new BadRequestObjectResult(resultMapped);
             }
+        }
+
+        private static DefaultResultDto ConvertResultToDefault<T>(IResult<T> result) 
+        {
+            DefaultResultDto resultMapped;
+            var type = typeof(T);
+
+            if (type.IsPrimitive || type == typeof(Decimal) || type == typeof(String) || type == typeof(DateTime) || type == typeof(DateTimeOffset))
+            {
+                resultMapped = Mapper.Map((IResultBase)result);
+                resultMapped.ValueOrDefault = resultMapped.ValueOrDefault;
+            }
+            else
+            {
+                resultMapped = Mapper.Map(result);
+            }
+
+            return resultMapped;
         }
     }
 }

@@ -3,9 +3,9 @@ using FluentResults;
 
 namespace Api.Services
 {
-    public interface ICountryService
+    public interface ICountryService : IService<CountryDto, NewCountryDto>
     {
-        Task<Result<CountryDto>> Create(NewCountryDto dto);
-        Task<Result<bool>> Delete(CountryDto dto);
+        Task<Result<CountryDto>> AddObligation(ObligationDto obligationDto);
+        Task<Result<CountryDto>> RemoveObligation(ObligationDto obligationDto);
     }
 }
