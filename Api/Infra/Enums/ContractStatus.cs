@@ -4,7 +4,6 @@
     {
         New,
         Requested,
-        WaitingContractree,
         WaitingContractor,
         Active,
         Inactive,

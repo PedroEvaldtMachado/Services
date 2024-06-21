@@ -15,13 +15,13 @@ namespace Api.Services.Implementations
         private static readonly PersonType[] VALID_PERSON_TYPES = new[] { PersonType.Individual, PersonType.LegalEntity };
 
         private readonly Lazy<IRepository<Person>> _repository;
-        private readonly Lazy<ICountryRules> _countryRules;
+        private readonly Lazy<ICountryValidation> _countryValidation;
         private readonly Lazy<IContracteeQuery> _contracteeQuery;
 
-        public PersonService(Lazy<IRepository<Person>> repository, Lazy<ICountryRules> countryRules, Lazy<IContracteeQuery> contracteeQuery)
+        public PersonService(Lazy<IRepository<Person>> repository, Lazy<ICountryValidation> countryValidation, Lazy<IContracteeQuery> contracteeQuery)
         {
             _repository = repository;
-            _countryRules = countryRules;
+            _countryValidation = countryValidation;
             _contracteeQuery = contracteeQuery;
         }
 
@@ -35,7 +35,7 @@ namespace Api.Services.Implementations
             }
 
             var dto = Mapper.Map(newDto);
-            result.WithErrors((await _countryRules.Value.ValidatePerson(dto)).Errors);
+            result.WithErrors((await _countryValidation.Value.ValidateCountryForPerson(dto)).Errors);
 
             if (result.IsFailed)
             {
@@ -51,7 +51,7 @@ namespace Api.Services.Implementations
 
         public async Task<Result<bool>> Delete(PersonDto dto)
         {
-            if (dto is null || dto.Id == Guid.Empty)
+            if (dto is null || dto.Id <= 0)
             {
                 return false.ToResult().WithError(Message.Get(3));
             }

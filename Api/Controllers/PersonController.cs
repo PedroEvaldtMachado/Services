@@ -22,7 +22,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> Get(long id)
         {
             var dto = await _query.Value.GetById(id);
 

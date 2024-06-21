@@ -61,6 +61,15 @@ namespace Api.Infra.Resourses {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Message not implemented..
+        /// </summary>
+        public static string MSG000000000 {
+            get {
+                return ResourceManager.GetString("MSG000000000", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Already exist a country with same name..
         /// </summary>
         public static string MSG000000001 {
@@ -192,6 +201,60 @@ namespace Api.Infra.Resourses {
         public static string MSG000000015 {
             get {
                 return ResourceManager.GetString("MSG000000015", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already exist a service type with same name..
+        /// </summary>
+        public static string MSG000000016 {
+            get {
+                return ResourceManager.GetString("MSG000000016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contract need a service type..
+        /// </summary>
+        public static string MSG000000017 {
+            get {
+                return ResourceManager.GetString("MSG000000017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contract need a contractee..
+        /// </summary>
+        public static string MSG000000018 {
+            get {
+                return ResourceManager.GetString("MSG000000018", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contract need a contractor..
+        /// </summary>
+        public static string MSG000000019 {
+            get {
+                return ResourceManager.GetString("MSG000000019", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid contract status for this stage of contract..
+        /// </summary>
+        public static string MSG000000020 {
+            get {
+                return ResourceManager.GetString("MSG000000020", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contractor need a person..
+        /// </summary>
+        public static string MSG000000021 {
+            get {
+                return ResourceManager.GetString("MSG000000021", resourceCulture);
             }
         }
     }

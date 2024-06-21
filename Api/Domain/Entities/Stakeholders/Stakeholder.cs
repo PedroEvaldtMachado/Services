@@ -4,7 +4,7 @@ namespace Api.Domain.Entities.Stakeholders
 {
     public abstract class Stakeholder : BaseEntity
     {
-        public Guid PersonId { get; set; }
+        public long PersonId { get; set; }
 
         public decimal? Rate { get; set; }
     }

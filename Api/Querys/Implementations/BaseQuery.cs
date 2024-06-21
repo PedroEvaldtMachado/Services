@@ -20,7 +20,7 @@ namespace Api.Querys.Implementations
             Collection = baseParams.ServiceProvider.GetRequiredService<IDbContext>().GetCollection<E>();
         }
 
-        protected async Task<E?> GetEntityById(Guid id)
+        protected async Task<E?> GetEntityById(long id)
         {
             var entAsync = await Collection.FindAsync(d => d.Id == id);
             var ent = await entAsync.FirstOrDefaultAsync();
@@ -28,7 +28,7 @@ namespace Api.Querys.Implementations
             return ent;
         }
 
-        public async Task<D?> GetById(Guid id)
+        public async Task<D?> GetById(long id)
         {
             var ent = await GetEntityById(id);
 

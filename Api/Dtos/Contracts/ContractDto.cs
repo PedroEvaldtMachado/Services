@@ -1,16 +1,15 @@
 ﻿using Api.Dtos;
 using Api.Infra.Enums;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace Api.Dtos.Contracts
 {
     public class ContractDto : BaseDto
     {
-        public Guid ContracteeServiceId { get; set; }
+        public long ContracteeServiceId { get; set; }
 
-        public Guid ContracteeId { get; set; }
+        public long ContracteeId { get; set; }
 
-        public Guid ContractorId { get; set; }
+        public long ContractorId { get; set; }
 
         public DateTimeOffset StartDate { get; set; }
 

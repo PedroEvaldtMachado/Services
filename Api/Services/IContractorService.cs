@@ -3,7 +3,7 @@ using FluentResults;
 
 namespace Api.Services
 {
-    public interface IContracteeService : IService<ContracteeDto, NewContracteeDto>
+    public interface IContractorService : IService<ContractorDto, NewContractorDto>
     {
         Task<Result<bool>> DeleteByPerson(long personId);
     }

@@ -5,16 +5,16 @@ using MongoDB.Driver;
 
 namespace Api.Querys.Implementations
 {
-    public class ContracteeQuery : BaseQuery<Contractee, ContracteeDto>, IContracteeQuery
+    public class ContractorQuery : BaseQuery<Contractor, ContractorDto>, IContractorQuery
     {
         private readonly Lazy<IPersonQuery> _personQuery;
 
-        public ContracteeQuery(BaseQueryParams baseParams, Lazy<IPersonQuery> personQuery) : base(baseParams)
+        public ContractorQuery(BaseQueryParams baseParams, Lazy<IPersonQuery> personQuery) : base(baseParams)
         {
             _personQuery = personQuery;
         }
 
-        public async Task<IEnumerable<ContracteeDto>> Search(string value)
+        public async Task<IEnumerable<ContractorDto>> Search(string value)
         {
             value ??= string.Empty;
             value = value.ToLower();
@@ -24,10 +24,10 @@ namespace Api.Querys.Implementations
             var query = await Collection.FindAsync(c => personIds.Contains(c.PersonId));
             var values = await query.ToListAsync();
 
-            return values.Select(c => c.To<ContracteeDto>());
+            return values.Select(c => c.To<ContractorDto>());
         }
 
-        public async Task<ContracteeDto> GetByPersonId(long personId)
+        public async Task<ContractorDto> GetByPersonId(long personId)
         {
             var query = await Collection.FindAsync(c => c.PersonId == personId);
             return Mapper.Map(await query.FirstOrDefaultAsync());

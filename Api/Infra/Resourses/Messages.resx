@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MSG000000000" xml:space="preserve">
+    <value>Message not implemented.</value>
+  </data>
   <data name="MSG000000001" xml:space="preserve">
     <value>Already exist a country with same name.</value>
   </data>
@@ -161,5 +164,23 @@
   </data>
   <data name="MSG000000015" xml:space="preserve">
     <value>Must delete contractee before delete person.</value>
+  </data>
+  <data name="MSG000000016" xml:space="preserve">
+    <value>Already exist a service type with same name.</value>
+  </data>
+  <data name="MSG000000017" xml:space="preserve">
+    <value>Contract need a service type.</value>
+  </data>
+  <data name="MSG000000018" xml:space="preserve">
+    <value>Contract need a contractee.</value>
+  </data>
+  <data name="MSG000000019" xml:space="preserve">
+    <value>Contract need a contractor.</value>
+  </data>
+  <data name="MSG000000020" xml:space="preserve">
+    <value>Invalid contract status for this stage of contract.</value>
+  </data>
+  <data name="MSG000000021" xml:space="preserve">
+    <value>Contractor need a person.</value>
   </data>
 </root>

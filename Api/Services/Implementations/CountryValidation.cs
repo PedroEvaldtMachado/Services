@@ -7,16 +7,16 @@ using System.Linq;
 
 namespace Api.Services.Implementations
 {
-    public class CountryRules : ICountryRules
+    public class CountryValidation : ICountryValidation
     {
         private readonly Lazy<ICountryQuery> _countryQuery;
 
-        public CountryRules(Lazy<ICountryQuery> countryQuery)
+        public CountryValidation(Lazy<ICountryQuery> countryQuery)
         {
             _countryQuery = countryQuery;
         }
 
-        public async Task<Result> ValidatePerson(PersonDto person)
+        public async Task<Result> ValidateCountryForPerson(PersonDto person)
         {
             var result = new Result();
 

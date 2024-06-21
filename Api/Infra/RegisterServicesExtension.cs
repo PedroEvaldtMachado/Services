@@ -32,21 +32,26 @@ namespace Api.Infra
             services.AddScoped<IPersonQuery, PersonQuery>();
             services.AddScoped<ICountryQuery, CountryQuery>();
             services.AddScoped<IContracteeQuery, ContracteeQuery>();
+            services.AddScoped<IContractorQuery, ContractorQuery>();
+            services.AddScoped<IContractQuery, ContractQuery>();
+            services.AddScoped<IServiceTypeQuery, ServiceTypeQuery>();
         }
 
         private static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<ICountryValidation, CountryValidation>();
             services.AddScoped<IContracteeService, ContracteeService>();
-            services.AddScoped<ICountryRules, CountryRules>();
+            services.AddScoped<IContractorService, ContractorService>();
+            services.AddScoped<IContractService, ContractService>();
+            services.AddScoped<IServiceTypeService, ServiceTypeService>();
         }
 
         private static void AddRepositories(this IServiceCollection services) 
         {
             services.AddScoped(typeof(RepositoryParams));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            //services.AddScoped(typeof(IRepository<Person>), typeof(Repository<Person>));
         }
     }
 }

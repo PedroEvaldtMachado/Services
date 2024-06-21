@@ -10,7 +10,7 @@ namespace Api.Dtos.Persons
 
         public DateTimeOffset RegisterDate { get; set; }
 
-        public Guid CountryId { get; set; }
+        public long CountryId { get; set; }
 
         public PersonType PersonType { get; set; }
 

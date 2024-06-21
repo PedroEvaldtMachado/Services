@@ -5,7 +5,7 @@ namespace Api.Dtos.Stakeholders
 {
     public abstract class StakeholderDto : BaseDto
     {
-        public Guid PersonId { get; set; }
+        public long PersonId { get; set; }
 
         public decimal? Rate { get; set; }
     }

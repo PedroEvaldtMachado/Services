@@ -2,7 +2,7 @@
 {
     public class SchedulingDate : BaseEntity
     {
-        public Guid ContracteeId { get; set; }
+        public long ContracteeId { get; set; }
 
         public DayOfWeek DayOfWeek { get; set; }
 

@@ -8,7 +8,7 @@ namespace Api.Dtos.Persons
 
         public string? Username { get; set; }
 
-        public Guid CountryId { get; set; }
+        public long CountryId { get; set; }
 
         public PersonType PersonType { get; set; }
 

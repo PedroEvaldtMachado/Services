@@ -5,7 +5,7 @@ namespace Api.Querys
 {
     public interface IContracteeQuery : IQuery<Contractee, ContracteeDto>
     {
-        Task<ContracteeDto> GetByPersonId(Guid personId);
+        Task<ContracteeDto> GetByPersonId(long personId);
         Task<IEnumerable<ContracteeDto>> Search(string value);
     }
 }

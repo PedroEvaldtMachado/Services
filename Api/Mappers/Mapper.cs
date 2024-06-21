@@ -4,7 +4,6 @@ using Api.Dtos.Persons;
 using Api.Dtos;
 using FluentResults;
 using Riok.Mapperly.Abstractions;
-using System.Runtime.CompilerServices;
 using Api.Domain.Entities.Persons;
 using Api.Domain.Entities.Countrys;
 using Api.Domain.Entities.Contracts;
@@ -16,6 +15,7 @@ using Api.Domain.Entities.Stakeholders;
 using Api.Domain.Entities.Services;
 using Api.Dtos.Services;
 using Microsoft.OpenApi.Any;
+using System.Collections;
 
 namespace Api.Mappers
 {
@@ -24,6 +24,8 @@ namespace Api.Mappers
     {
         public static partial D Map<O, D>(O origin);
         public static partial D To<D>(this object origin);
+        public static partial IEnumerable Map(IEnumerable originCollection);
+        public static partial ICollection Map(ICollection originCollection);
 
         public static partial BaseDto Map(BaseEntity ent);
         public static partial BaseEntity Map(BaseDto dto);
@@ -57,6 +59,7 @@ namespace Api.Mappers
 
         public static partial ContractDto Map(Contract ent);
         public static partial Contract Map(ContractDto dto);
+        public static partial ContractDto Map(NewContractDto dto);
         public static partial ContractDetailDto Map(ContractDetail ent);
         public static partial ContractDetail Map(ContractDetailDto dto);
 
@@ -67,6 +70,7 @@ namespace Api.Mappers
 
         public static partial ServiceTypeDto Map(ServiceType ent);
         public static partial ServiceType Map(ServiceTypeDto dto);
+        public static partial ServiceTypeDto Map(NewServiceTypeDto dto);
         public static partial ContracteeServiceDto Map(ContracteeService ent);
         public static partial ContracteeService Map(ContracteeServiceDto dto);
         public static partial ContracteeServiceDetailDto Map(ContracteeServiceDetail ent);

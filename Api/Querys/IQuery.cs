@@ -8,6 +8,6 @@ namespace Api.Querys
         where D : BaseDto
     {
         Task<ICollection<D>?> GetAll();
-        Task<D?> GetById(Guid id);
+        Task<D?> GetById(long id);
     }
 }

@@ -29,7 +29,7 @@ namespace Api.Services.Implementations
                 return result;
             }
 
-            result.WithErrors((await Duplicated(newDto)).Errors);
+            result.WithErrors((await DuplicateValidation(newDto)).Errors);
 
             if (result.IsFailed)
             {
@@ -45,7 +45,7 @@ namespace Api.Services.Implementations
 
         public async Task<Result<bool>> Delete(CountryDto dto)
         {
-            if (dto is null || dto.Id == Guid.Empty)
+            if (dto is null || dto.Id <= 0)
             {
                 return false.ToResult().WithError(Message.Get(3));
             }
@@ -100,7 +100,7 @@ namespace Api.Services.Implementations
             return result.WithValue(Mapper.Map(ent));
         }
 
-        private async Task<Result<CountryDto>> Duplicated(NewCountryDto dto)
+        private async Task<Result<CountryDto>> DuplicateValidation(NewCountryDto dto)
         {
             var result = new Result<CountryDto>();
 

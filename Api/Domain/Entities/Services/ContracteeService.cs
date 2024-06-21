@@ -2,9 +2,9 @@
 {
     public class ContracteeService : BaseEntity
     {
-        public Guid ServiceTypeId { get; set; }
+        public long ServiceTypeId { get; set; }
 
-        public Guid ContracteeId { get; set; }
+        public long ContracteeId { get; set; }
 
         public string? Metric { get; set; }
 

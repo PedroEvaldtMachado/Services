@@ -8,12 +8,12 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ContracteeController
+    public class ContractorController
     {
-        private readonly Lazy<IContracteeQuery> _query;
-        private readonly Lazy<IContracteeService> _service;
+        private readonly Lazy<IContractorQuery> _query;
+        private readonly Lazy<IContractorService> _service;
 
-        public ContracteeController(Lazy<IContracteeQuery> query, Lazy<IContracteeService> service)
+        public ContractorController(Lazy<IContractorQuery> query, Lazy<IContractorService> service)
         {
             _query = query;
             _service = service;
@@ -46,7 +46,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(NewContracteeDto dto)
+        public async Task<IActionResult> Create(NewContractorDto dto)
         {
             var result = await _service.Value.Create(dto);
 
@@ -54,7 +54,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(ContracteeDto dto)
+        public async Task<IActionResult> Delete(ContractorDto dto)
         {
             var result = await _service.Value.Delete(dto);
 

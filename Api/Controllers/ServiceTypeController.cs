@@ -1,4 +1,5 @@
-﻿using Api.Dtos.Stakeholders;
+﻿using Api.Dtos.Persons;
+using Api.Dtos.Services;
 using Api.Infra;
 using Api.Querys;
 using Api.Services;
@@ -8,12 +9,12 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ContracteeController
+    public class ServiceTypeController
     {
-        private readonly Lazy<IContracteeQuery> _query;
-        private readonly Lazy<IContracteeService> _service;
+        private readonly Lazy<IServiceTypeQuery> _query;
+        private readonly Lazy<IServiceTypeService> _service;
 
-        public ContracteeController(Lazy<IContracteeQuery> query, Lazy<IContracteeService> service)
+        public ServiceTypeController(Lazy<IServiceTypeQuery> query, Lazy<IServiceTypeService> service)
         {
             _query = query;
             _service = service;
@@ -22,9 +23,9 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(long id)
         {
-            var result = await _query.Value.GetById(id);
+            var dto = await _query.Value.GetById(id);
 
-            return result.ToResultResponse();
+            return dto.ToResultResponse();
         }
 
         [HttpGet]
@@ -46,7 +47,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(NewContracteeDto dto)
+        public async Task<IActionResult> Create(NewServiceTypeDto dto)
         {
             var result = await _service.Value.Create(dto);
 
@@ -54,7 +55,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(ContracteeDto dto)
+        public async Task<IActionResult> Delete(ServiceTypeDto dto)
         {
             var result = await _service.Value.Delete(dto);
 

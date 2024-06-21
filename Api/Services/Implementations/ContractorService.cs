@@ -9,18 +9,18 @@ using MongoDB.Driver;
 
 namespace Api.Services.Implementations
 {
-    public class ContracteeService : IContracteeService
+    public class ContractorService : IContractorService
     {
-        private readonly Lazy<IRepository<Contractee>> _repository;
+        private readonly Lazy<IRepository<Contractor>> _repository;
         private readonly Lazy<IPersonService> _personService;
 
-        public ContracteeService(Lazy<IRepository<Contractee>> repository, Lazy<IPersonService> personService)
+        public ContractorService(Lazy<IRepository<Contractor>> repository, Lazy<IPersonService> personService)
         {
             _repository = repository;
             _personService = personService;
         }
 
-        public async Task<Result<ContracteeDto>> Create(NewContracteeDto newDto)
+        public async Task<Result<ContractorDto>> Create(NewContractorDto newDto)
         {
             var result = ValidateNew(newDto);
             if (result.IsFailed)
@@ -41,7 +41,7 @@ namespace Api.Services.Implementations
 
                 if (personResult.IsFailed)
                 {
-                    return personResult.ToResult<ContracteeDto>();
+                    return personResult.ToResult<ContractorDto>();
                 }
 
                 newDto.PersonId = personResult.Value.Id;
@@ -54,7 +54,7 @@ namespace Api.Services.Implementations
             return result.WithValue(Mapper.Map(ent));
         }
 
-        public async Task<Result<bool>> Delete(ContracteeDto dto)
+        public async Task<Result<bool>> Delete(ContractorDto dto)
         {
             if (dto is null || dto.Id <= 0)
             {
@@ -78,7 +78,7 @@ namespace Api.Services.Implementations
             return (result.DeletedCount > 0).ToResult();
         }
 
-        private async Task<Result<ContracteeDto>> DuplicateValidation(NewContracteeDto dto)
+        private async Task<Result<ContractorDto>> DuplicateValidation(NewContractorDto dto)
         {
             var result = new Result();
 
@@ -92,7 +92,7 @@ namespace Api.Services.Implementations
             return result;
         }
 
-        private static Result<ContracteeDto> ValidateNew(NewContracteeDto dto)
+        private static Result<ContractorDto> ValidateNew(NewContractorDto dto)
         {
             var result = new Result();
 
@@ -104,7 +104,7 @@ namespace Api.Services.Implementations
             {
                 if (dto.PersonId is null or <= 0 && dto.Person is null)
                 {
-                    result.WithError(Message.Get(10));
+                    result.WithError(Message.Get(21));
                 }
             }
 
