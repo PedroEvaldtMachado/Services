@@ -257,5 +257,32 @@ namespace Api.Infra.Resourses {
                 return ResourceManager.GetString("MSG000000021", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contractee service provider need a service type..
+        /// </summary>
+        public static string MSG000000022 {
+            get {
+                return ResourceManager.GetString("MSG000000022", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contractee service provider need a contractee..
+        /// </summary>
+        public static string MSG000000023 {
+            get {
+                return ResourceManager.GetString("MSG000000023", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already exist a contractee service provider with same service type and contractee..
+        /// </summary>
+        public static string MSG000000024 {
+            get {
+                return ResourceManager.GetString("MSG000000024", resourceCulture);
+            }
+        }
     }
 }

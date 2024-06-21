@@ -48,11 +48,8 @@ namespace Api.Services.Implementations
 
             dto.ContractStatus = ContractStatus.Active;
 
-            var ent = Mapper.Map(dto);
-
-            await _repository.Value.Collection.ReplaceOneAsync(c => c.Id == ent.Id, ent);
-
-            return Mapper.Map(ent).ToResult();
+            var updatedDto = await UpdateContract(dto);
+            return updatedDto.ToResult();
         }
 
         public async Task<Result<ContractDto>> ApproveWithModifications(ContractDto dto)
@@ -64,11 +61,8 @@ namespace Api.Services.Implementations
 
             dto.ContractStatus = NewContractStatusNegotiation(dto.ContractStatus);
 
-            var ent = Mapper.Map(dto);
-
-            await _repository.Value.Collection.ReplaceOneAsync(c => c.Id == ent.Id, ent);
-
-            return Mapper.Map(ent).ToResult();
+            var updatedDto = await UpdateContract(dto);
+            return updatedDto.ToResult();
         }
 
         private ContractStatus NewContractStatusNegotiation(ContractStatus contractStatus) 
@@ -90,13 +84,9 @@ namespace Api.Services.Implementations
 
             dto.ContractStatus = ContractStatus.Done;
 
-            var ent = Mapper.Map(dto);
-
-            await _repository.Value.Collection.ReplaceOneAsync(c => c.Id == ent.Id, ent);
-
             //TODO: Update contractee counter
-
-            return Mapper.Map(ent).ToResult();
+            var updatedDto = await UpdateContract(dto);
+            return updatedDto.ToResult();
         }
 
         public async Task<Result<ContractDto>> Canceled(ContractDto dto)
@@ -108,11 +98,8 @@ namespace Api.Services.Implementations
 
             dto.ContractStatus = ContractStatus.Canceled;
 
-            var ent = Mapper.Map(dto);
-
-            await _repository.Value.Collection.ReplaceOneAsync(c => c.Id == ent.Id, ent);
-
-            return Mapper.Map(ent).ToResult();
+            var updatedDto = await UpdateContract(dto);
+            return updatedDto.ToResult();
         }
 
         public async Task<Result<ContractDto>> Reject(ContractDto dto)
@@ -124,11 +111,8 @@ namespace Api.Services.Implementations
 
             dto.ContractStatus = ContractStatus.Rejected;
 
-            var ent = Mapper.Map(dto);
-
-            await _repository.Value.Collection.ReplaceOneAsync(c => c.Id == ent.Id, ent);
-
-            return Mapper.Map(ent).ToResult();
+            var updatedDto = await UpdateContract(dto);
+            return updatedDto.ToResult();
         }
 
         public async Task<Result<ContractDto>> Inactive(ContractDto dto)
@@ -140,11 +124,17 @@ namespace Api.Services.Implementations
 
             dto.ContractStatus = ContractStatus.Inactive;
 
+            var updatedDto = await UpdateContract(dto);
+            return updatedDto.ToResult();
+        }
+
+        private async Task<ContractDto> UpdateContract(ContractDto dto)
+        {
             var ent = Mapper.Map(dto);
 
             await _repository.Value.Collection.ReplaceOneAsync(c => c.Id == ent.Id, ent);
 
-            return Mapper.Map(ent).ToResult();
+            return Mapper.Map(ent);
         }
 
         private static Result<ContractDto> ValidateNew(NewContractDto dto)

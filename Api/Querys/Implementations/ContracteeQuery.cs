@@ -8,13 +8,29 @@ namespace Api.Querys.Implementations
     public class ContracteeQuery : BaseQuery<Contractee, ContracteeDto>, IContracteeQuery
     {
         private readonly Lazy<IPersonQuery> _personQuery;
+        private readonly Lazy<IContracteeServiceProvideQuery> _contracteeServiceProvideQuery;
 
-        public ContracteeQuery(BaseQueryParams baseParams, Lazy<IPersonQuery> personQuery) : base(baseParams)
+        public ContracteeQuery(BaseQueryParams baseParams, Lazy<IPersonQuery> personQuery, Lazy<IContracteeServiceProvideQuery> contracteeServiceProvideQuery) : base(baseParams)
         {
             _personQuery = personQuery;
+            _contracteeServiceProvideQuery = contracteeServiceProvideQuery;
         }
 
         public async Task<IEnumerable<ContracteeDto>> Search(string value)
+        {
+            var byName = await SearchByName(value);
+            var byServiceProvided = await SearchByServiceProvided(value);
+
+            return byName.Union(byServiceProvided);
+        }
+
+        public async Task<ContracteeDto> GetByPersonId(long personId)
+        {
+            var query = await Collection.FindAsync(c => c.PersonId == personId);
+            return Mapper.Map(await query.FirstOrDefaultAsync());
+        }
+
+        public async Task<IEnumerable<ContracteeDto>> SearchByName(string value)
         {
             value ??= string.Empty;
             value = value.ToLower();
@@ -27,10 +43,17 @@ namespace Api.Querys.Implementations
             return values.Select(c => c.To<ContracteeDto>());
         }
 
-        public async Task<ContracteeDto> GetByPersonId(long personId)
+        public async Task<IEnumerable<ContracteeDto>> SearchByServiceProvided(string value)
         {
-            var query = await Collection.FindAsync(c => c.PersonId == personId);
-            return Mapper.Map(await query.FirstOrDefaultAsync());
+            value ??= string.Empty;
+            value = value.ToLower();
+
+            var contracteesIds = (await _contracteeServiceProvideQuery.Value.Search(value)).Select(c => c.ContracteeId);
+
+            var query = await Collection.FindAsync(c => contracteesIds.Contains(c.Id));
+            var values = await query.ToListAsync();
+
+            return values.Select(c => c.To<ContracteeDto>());
         }
     }
 }

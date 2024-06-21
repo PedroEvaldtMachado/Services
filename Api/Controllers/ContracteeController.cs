@@ -1,6 +1,8 @@
-﻿using Api.Dtos.Stakeholders;
+﻿using Api.Dtos.Services;
+using Api.Dtos.Stakeholders;
 using Api.Infra;
 using Api.Querys;
+using Api.Querys.Implementations;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +14,15 @@ namespace Api.Controllers
     {
         private readonly Lazy<IContracteeQuery> _query;
         private readonly Lazy<IContracteeService> _service;
+        private readonly Lazy<IContracteeServiceProvideQuery> _contracteeServiceProvideQuery;
+        private readonly Lazy<IContracteeServiceProvideService> _contracteeServiceProvideService;
 
-        public ContracteeController(Lazy<IContracteeQuery> query, Lazy<IContracteeService> service)
+        public ContracteeController(Lazy<IContracteeQuery> query, Lazy<IContracteeService> service, Lazy<IContracteeServiceProvideService> contracteeServiceProvideService, Lazy<IContracteeServiceProvideQuery> contracteeServiceProvideQuery)
         {
             _query = query;
             _service = service;
+            _contracteeServiceProvideQuery = contracteeServiceProvideQuery;
+            _contracteeServiceProvideService = contracteeServiceProvideService;
         }
 
         [HttpGet]
@@ -57,6 +63,33 @@ namespace Api.Controllers
         public async Task<IActionResult> Delete(ContracteeDto dto)
         {
             var result = await _service.Value.Delete(dto);
+
+            return result.ToCompleteResponse();
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetServicesProvided(long id)
+        {
+            var result = await _contracteeServiceProvideQuery.Value.GetByContracteeId(id);
+
+            return result.ToResultResponse();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AddServiceProvided(NewContracteeServiceProvideDto dto)
+        {
+            var result = await _contracteeServiceProvideService.Value.Create(dto);
+
+            return result.ToCompleteResponse();
+        }
+
+        [HttpDelete]
+        [Route("[action]")]
+        public async Task<IActionResult> RemoveServiceProvided(ContracteeServiceProvideDto dto)
+        {
+            var result = await _contracteeServiceProvideService.Value.Delete(dto);
 
             return result.ToCompleteResponse();
         }

@@ -7,5 +7,7 @@ namespace Api.Querys
     {
         Task<ContracteeDto> GetByPersonId(long personId);
         Task<IEnumerable<ContracteeDto>> Search(string value);
+        Task<IEnumerable<ContracteeDto>> SearchByName(string value);
+        Task<IEnumerable<ContracteeDto>> SearchByServiceProvided(string value);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Api.Domain.Entities.Services
 {
-    public class ContracteeService : BaseEntity
+    public class ContracteeServiceProvide : BaseEntity
     {
         public long ServiceTypeId { get; set; }
 
@@ -14,7 +14,7 @@
 
         public ICollection<ContracteeServiceDetail> ContracteeServiceDetails { get; set; }
 
-        public ContracteeService() 
+        public ContracteeServiceProvide() 
         {
             ContracteeServiceDetails = new List<ContracteeServiceDetail>(); 
         }

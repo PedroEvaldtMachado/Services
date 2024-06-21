@@ -2,7 +2,7 @@
 
 namespace Api.Dtos.Services
 {
-    public class ContracteeServiceDto : BaseDto
+    public class ContracteeServiceProvideDto : BaseDto
     {
         public long ServiceTypeId { get; set; }
 
@@ -13,5 +13,12 @@ namespace Api.Dtos.Services
         public decimal Value { get; set; }
 
         public string? AdditionalInfo { get; set; }
+
+        public ICollection<ContracteeServiceDetailDto> ContracteeServiceDetail { get; set; }
+
+        public ContracteeServiceProvideDto() 
+        {
+            ContracteeServiceDetail = new List<ContracteeServiceDetailDto>();
+        }
     }
 }

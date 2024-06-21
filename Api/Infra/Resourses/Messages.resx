@@ -183,4 +183,13 @@
   <data name="MSG000000021" xml:space="preserve">
     <value>Contractor need a person.</value>
   </data>
+  <data name="MSG000000022" xml:space="preserve">
+    <value>Contractee service provider need a service type.</value>
+  </data>
+  <data name="MSG000000023" xml:space="preserve">
+    <value>Contractee service provider need a contractee.</value>
+  </data>
+  <data name="MSG000000024" xml:space="preserve">
+    <value>Already exist a contractee service provider with same service type and contractee.</value>
+  </data>
 </root>

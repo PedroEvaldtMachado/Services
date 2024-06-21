@@ -32,6 +32,7 @@ namespace Api.Infra
             services.AddScoped<IPersonQuery, PersonQuery>();
             services.AddScoped<ICountryQuery, CountryQuery>();
             services.AddScoped<IContracteeQuery, ContracteeQuery>();
+            services.AddScoped<IContracteeServiceProvideQuery, ContracteeServiceProvideQuery>();
             services.AddScoped<IContractorQuery, ContractorQuery>();
             services.AddScoped<IContractQuery, ContractQuery>();
             services.AddScoped<IServiceTypeQuery, ServiceTypeQuery>();
@@ -43,6 +44,7 @@ namespace Api.Infra
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ICountryValidation, CountryValidation>();
             services.AddScoped<IContracteeService, ContracteeService>();
+            services.AddScoped<IContracteeServiceProvideService, ContracteeServiceProvideService>();
             services.AddScoped<IContractorService, ContractorService>();
             services.AddScoped<IContractService, ContractService>();
             services.AddScoped<IServiceTypeService, ServiceTypeService>();

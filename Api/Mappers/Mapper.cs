@@ -71,8 +71,10 @@ namespace Api.Mappers
         public static partial ServiceTypeDto Map(ServiceType ent);
         public static partial ServiceType Map(ServiceTypeDto dto);
         public static partial ServiceTypeDto Map(NewServiceTypeDto dto);
-        public static partial ContracteeServiceDto Map(ContracteeService ent);
-        public static partial ContracteeService Map(ContracteeServiceDto dto);
+        public static partial ContracteeServiceProvideDto Map(ContracteeServiceProvide ent);
+        public static partial ContracteeServiceProvide Map(ContracteeServiceProvideDto dto);
+        public static partial ContracteeServiceProvideDto Map(NewContracteeServiceProvideDto dto);
+        
         public static partial ContracteeServiceDetailDto Map(ContracteeServiceDetail ent);
         public static partial ContracteeServiceDetail Map(ContracteeServiceDetailDto dto);
     }
