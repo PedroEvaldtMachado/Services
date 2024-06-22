@@ -1,14 +1,10 @@
 ﻿using Api.Domain.Entities.Contracts;
-using Api.Domain.Entities.Stakeholders;
 using Api.Dtos.Contracts;
-using Api.Dtos.Countrys;
-using Api.Dtos.Stakeholders;
 using Api.Infra.Enums;
 using Api.Infra.Resourses;
 using Api.Mappers;
 using Api.Repositorys;
 using FluentResults;
-using MongoDB.Driver;
 
 namespace Api.Services.Implementations
 {
@@ -34,7 +30,7 @@ namespace Api.Services.Implementations
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
 
-            await _repository.Value.Collection.InsertOneAsync(ent);
+            await _repository.Value.InsertAsync(ent);
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -65,7 +61,7 @@ namespace Api.Services.Implementations
             return updatedDto.ToResult();
         }
 
-        private ContractStatus NewContractStatusNegotiation(ContractStatus contractStatus) 
+        private ContractStatus NewContractStatusNegotiation(ContractStatus contractStatus)
         {
             return (contractStatus) switch
             {
@@ -132,7 +128,7 @@ namespace Api.Services.Implementations
         {
             var ent = Mapper.Map(dto);
 
-            await _repository.Value.Collection.ReplaceOneAsync(c => c.Id == ent.Id, ent);
+            await _repository.Value.UpdateAsync(ent);
 
             return Mapper.Map(ent);
         }
@@ -163,7 +159,7 @@ namespace Api.Services.Implementations
                 }
 
                 if (dto.ContractStatus != ContractStatus.New)
-                { 
+                {
                     result.WithError(Message.Get(20));
                 }
             }

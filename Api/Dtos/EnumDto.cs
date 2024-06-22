@@ -6,7 +6,7 @@
 
         public string Name { get; set; }
 
-        public EnumDto() 
+        public EnumDto()
         {
             Name = string.Empty;
         }

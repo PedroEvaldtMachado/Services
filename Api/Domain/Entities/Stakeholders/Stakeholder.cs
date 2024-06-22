@@ -1,6 +1,4 @@
-﻿using Api.Infra.Enums;
-
-namespace Api.Domain.Entities.Stakeholders
+﻿namespace Api.Domain.Entities.Stakeholders
 {
     public abstract class Stakeholder : BaseEntity
     {

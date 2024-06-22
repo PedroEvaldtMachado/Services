@@ -2,7 +2,6 @@
 using Api.Dtos.Stakeholders;
 using Api.Infra;
 using Api.Querys;
-using Api.Querys.Implementations;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
 

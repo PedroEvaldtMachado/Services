@@ -1,9 +1,7 @@
 ﻿using Api.Domain.Entities.Services;
-using Api.Dtos;
 using Api.Dtos.Services;
+using Api.Infra;
 using Api.Mappers;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace Api.Querys.Implementations
 {
@@ -23,18 +21,16 @@ namespace Api.Querys.Implementations
 
             var servicesTypes = (await _serviceTypeQuery.Value.Search(value)).Select(s => s.Id);
 
-            var query = await Collection.FindAsync(c => servicesTypes.Contains(c.ServiceTypeId) || c.AdditionalInfo!.ToLower().Contains(value));
-            var values = await query.ToListAsync();
+            var values = await Queryable.Where(c => servicesTypes.Contains(c.ServiceTypeId) || c.AdditionalInfo!.ToLower().Contains(value)).ToListTryAsync();
 
-            return values.Select(c => c.To<ContracteeServiceProvideDto>());
+            return (values ?? new()).Select(c => c.To<ContracteeServiceProvideDto>());
         }
 
         public async Task<IEnumerable<ContracteeServiceProvideDto>> GetByContracteeId(long contracteeId)
         {
-            var query = await Collection.FindAsync(c => c.ContracteeId == contracteeId);
-            var values = await query.ToListAsync();
+            var values = await Queryable.Where(c => c.ContracteeId == contracteeId).ToListTryAsync();
 
-            return values.Select(c => c.To<ContracteeServiceProvideDto>());
+            return (values ?? new()).Select(c => c.To<ContracteeServiceProvideDto>());
         }
     }
 }

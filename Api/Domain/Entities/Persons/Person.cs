@@ -1,5 +1,4 @@
 ﻿using Api.Infra.Enums;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace Api.Domain.Entities.Persons
 {

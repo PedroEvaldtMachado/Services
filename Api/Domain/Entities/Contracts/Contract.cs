@@ -22,8 +22,8 @@ namespace Api.Domain.Entities.Contracts
 
         public ICollection<ContractDetail> ContractDetails { get; set; }
 
-        public Contract() 
-        { 
+        public Contract()
+        {
             ContractDetails = new List<ContractDetail>();
         }
     }

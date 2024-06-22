@@ -1,11 +1,10 @@
 ﻿using Api.Domain.Entities.Stakeholders;
-using Api.Dtos.Countrys;
 using Api.Dtos.Stakeholders;
+using Api.Infra;
 using Api.Infra.Resourses;
 using Api.Mappers;
 using Api.Repositorys;
 using FluentResults;
-using MongoDB.Driver;
 
 namespace Api.Services.Implementations
 {
@@ -49,7 +48,7 @@ namespace Api.Services.Implementations
 
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
-            await _repository.Value.Collection.InsertOneAsync(ent);
+            await _repository.Value.InsertAsync(ent);
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -61,9 +60,9 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(3));
             }
 
-            var result = await _repository.Value.Collection.DeleteOneAsync(e => e.Id == dto.Id);
+            var result = await _repository.Value.DeleteAsync(Mapper.Map(dto));
 
-            return (result.DeletedCount > 0).ToResult();
+            return (result > 0).ToResult();
         }
 
         public async Task<Result<bool>> DeleteByPerson(long personId)
@@ -73,18 +72,26 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(10));
             }
 
-            var result = await _repository.Value.Collection.DeleteOneAsync(e => e.PersonId == personId);
+            var contractor = await _repository.Value.Queryable.FirstOrDefaultTryAsync(c => c.PersonId == personId);
 
-            return (result.DeletedCount > 0).ToResult();
+            if (contractor is null)
+            {
+                return false.ToResult().WithError(Message.Get(10));
+            }
+
+
+            var result = await _repository.Value.DeleteAsync(contractor);
+
+            return (result > 0).ToResult();
         }
 
         private async Task<Result<ContractorDto>> DuplicateValidation(NewContractorDto dto)
         {
             var result = new Result();
 
-            var existsSameName = await _repository.Value.Collection.FindAsync(e => e.PersonId == dto.PersonId);
+            var existsWithSameName = await _repository.Value.FindAsync(dto.PersonId!.Value);
 
-            if (await existsSameName.AnyAsync())
+            if (existsWithSameName is not null)
             {
                 result.WithError(Message.Get(9));
             }

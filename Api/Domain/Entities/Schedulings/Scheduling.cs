@@ -1,6 +1,4 @@
-﻿using Api.Infra.Enums;
-
-namespace Api.Domain.Entities.Schedulings
+﻿namespace Api.Domain.Entities.Schedulings
 {
     public class Scheduling : BaseEntity
     {

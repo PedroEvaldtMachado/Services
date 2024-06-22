@@ -1,5 +1,4 @@
-﻿using Api.Dtos;
-using Api.Infra.Enums;
+﻿using Api.Infra.Enums;
 
 namespace Api.Dtos.Services
 {

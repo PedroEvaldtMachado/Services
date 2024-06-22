@@ -1,6 +1,4 @@
-﻿using Api.Dtos;
-
-namespace Api.Dtos.Schedulings
+﻿namespace Api.Dtos.Schedulings
 {
     public class SchedulingDateDto : BaseDto
     {

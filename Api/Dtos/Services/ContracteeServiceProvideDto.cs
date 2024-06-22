@@ -1,6 +1,4 @@
-﻿using Api.Dtos;
-
-namespace Api.Dtos.Services
+﻿namespace Api.Dtos.Services
 {
     public class ContracteeServiceProvideDto : BaseDto
     {
@@ -16,7 +14,7 @@ namespace Api.Dtos.Services
 
         public ICollection<ContracteeServiceDetailDto> ContracteeServiceDetail { get; set; }
 
-        public ContracteeServiceProvideDto() 
+        public ContracteeServiceProvideDto()
         {
             ContracteeServiceDetail = new List<ContracteeServiceDetailDto>();
         }

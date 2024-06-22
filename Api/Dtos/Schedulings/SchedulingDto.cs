@@ -1,7 +1,4 @@
-﻿using Api.Dtos;
-using Api.Infra.Enums;
-
-namespace Api.Dtos.Schedulings
+﻿namespace Api.Dtos.Schedulings
 {
     public class SchedulingDto : BaseDto
     {

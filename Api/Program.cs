@@ -1,5 +1,3 @@
-using Api.Domain;
-using Api.Domain.Implementations;
 using Api.Dtos;
 using Api.Infra;
 using System.Resources;
@@ -21,7 +19,7 @@ var appSettings = new AppSettings();
 builder.Configuration.Bind(appSettings);
 builder.Services.Configure<AppSettings>(builder.Configuration);
 
-builder.Services.RegisterServices();
+builder.Services.RegisterServices(appSettings);
 
 var app = builder.Build();
 

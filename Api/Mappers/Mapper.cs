@@ -1,20 +1,19 @@
 ﻿using Api.Domain.Entities;
+using Api.Domain.Entities.Contracts;
+using Api.Domain.Entities.Countrys;
+using Api.Domain.Entities.Persons;
+using Api.Domain.Entities.Schedulings;
+using Api.Domain.Entities.Services;
+using Api.Domain.Entities.Stakeholders;
+using Api.Dtos;
+using Api.Dtos.Contracts;
 using Api.Dtos.Countrys;
 using Api.Dtos.Persons;
-using Api.Dtos;
+using Api.Dtos.Schedulings;
+using Api.Dtos.Services;
+using Api.Dtos.Stakeholders;
 using FluentResults;
 using Riok.Mapperly.Abstractions;
-using Api.Domain.Entities.Persons;
-using Api.Domain.Entities.Countrys;
-using Api.Domain.Entities.Contracts;
-using Api.Dtos.Contracts;
-using Api.Dtos.Schedulings;
-using Api.Domain.Entities.Schedulings;
-using Api.Dtos.Stakeholders;
-using Api.Domain.Entities.Stakeholders;
-using Api.Domain.Entities.Services;
-using Api.Dtos.Services;
-using Microsoft.OpenApi.Any;
 using System.Collections;
 
 namespace Api.Mappers
@@ -74,7 +73,7 @@ namespace Api.Mappers
         public static partial ContracteeServiceProvideDto Map(ContracteeServiceProvide ent);
         public static partial ContracteeServiceProvide Map(ContracteeServiceProvideDto dto);
         public static partial ContracteeServiceProvideDto Map(NewContracteeServiceProvideDto dto);
-        
+
         public static partial ContracteeServiceDetailDto Map(ContracteeServiceDetail ent);
         public static partial ContracteeServiceDetail Map(ContracteeServiceDetailDto dto);
     }

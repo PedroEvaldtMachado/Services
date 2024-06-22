@@ -1,7 +1,4 @@
-﻿using Api.Dtos;
-using Api.Infra.Enums;
-
-namespace Api.Dtos.Stakeholders
+﻿namespace Api.Dtos.Stakeholders
 {
     public abstract class StakeholderDto : BaseDto
     {

@@ -3,11 +3,11 @@ using Api.Dtos;
 
 namespace Api.Querys
 {
-    public interface IQuery<E, D> 
+    public interface IQuery<E, D>
         where E : BaseEntity
         where D : BaseDto
     {
-        Task<ICollection<D>?> GetAll();
+        Task<ICollection<D>> GetAll();
         Task<D?> GetById(long id);
     }
 }

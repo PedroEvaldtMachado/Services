@@ -1,6 +1,4 @@
-﻿using Api.Dtos;
-
-namespace Api.Dtos.Services
+﻿namespace Api.Dtos.Services
 {
     public class NewServiceTypeDto
     {

@@ -1,24 +1,22 @@
-﻿using Api.Domain.Implementations;
-using Api.Domain;
-using Api.Domain.Entities;
+﻿using Api.Domain;
+using Api.Domain.Implementations;
 using Api.Dtos;
-using System.Linq;
+using Api.Infra.Enums;
 using Api.Querys;
 using Api.Querys.Implementations;
-using Api.Services.Implementations;
-using Api.Services;
-using Api.Repositorys.Implementations;
 using Api.Repositorys;
-using Api.Domain.Entities.Persons;
+using Api.Repositorys.Implementations;
+using Api.Services;
+using Api.Services.Implementations;
 
 namespace Api.Infra
 {
     public static class RegisterServicesExtension
     {
-        public static void RegisterServices(this IServiceCollection services) 
+        public static void RegisterServices(this IServiceCollection services, AppSettings appSettings)
         {
             services.AddTransient(typeof(Lazy<>));
-            services.AddScoped<IDbContext, DbContext>();
+            services.AddDatabase(appSettings);
 
             services.AddQuerys();
             services.AddRepositories();
@@ -50,10 +48,25 @@ namespace Api.Infra
             services.AddScoped<IServiceTypeService, ServiceTypeService>();
         }
 
-        private static void AddRepositories(this IServiceCollection services) 
+        private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped(typeof(RepositoryParams));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        }
+
+        private static void AddDatabase(this IServiceCollection services, AppSettings appSettings)
+        {
+            switch (appSettings.ConnectionDatabase.DataBaseType)
+            {
+                case DataBaseType.MongoDb:
+                    services.AddScoped<IDbContext, MongoDbContext>();
+                    break;
+                case DataBaseType.PostgreSql:
+                    services.AddDbContext<IDbContext, PostgreDbContext>();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

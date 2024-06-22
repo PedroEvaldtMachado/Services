@@ -1,7 +1,7 @@
-﻿using FluentResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Api.Dtos;
 using Api.Mappers;
-using Api.Dtos;
+using FluentResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Infra
 {
@@ -60,7 +60,7 @@ namespace Api.Infra
             }
         }
 
-        private static DefaultResultDto ConvertResultToDefault<T>(IResult<T> result) 
+        private static DefaultResultDto ConvertResultToDefault<T>(IResult<T> result)
         {
             DefaultResultDto resultMapped;
             var type = typeof(T);

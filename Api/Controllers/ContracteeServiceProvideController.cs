@@ -1,6 +1,4 @@
-﻿using Api.Dtos.Persons;
-using Api.Dtos.Services;
-using Api.Infra;
+﻿using Api.Infra;
 using Api.Querys;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;

@@ -14,9 +14,9 @@
 
         public ICollection<ContracteeServiceDetail> ContracteeServiceDetails { get; set; }
 
-        public ContracteeServiceProvide() 
+        public ContracteeServiceProvide()
         {
-            ContracteeServiceDetails = new List<ContracteeServiceDetail>(); 
+            ContracteeServiceDetails = new List<ContracteeServiceDetail>();
         }
     }
 }

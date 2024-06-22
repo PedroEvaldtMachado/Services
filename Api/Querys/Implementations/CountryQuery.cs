@@ -1,9 +1,7 @@
 ﻿using Api.Domain.Entities.Countrys;
-using Api.Dtos;
 using Api.Dtos.Countrys;
+using Api.Infra;
 using Api.Mappers;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace Api.Querys.Implementations
 {
@@ -18,10 +16,9 @@ namespace Api.Querys.Implementations
             value ??= string.Empty;
             value = value.ToLower();
 
-            var query = await Collection.FindAsync(c => c.Name!.ToLower().Contains(value) || c.Code!.ToLower().Contains(value));
-            var values = await query.ToListAsync();
+            var values = await Queryable.Where(c => c.Name!.ToLower().Contains(value) || c.Code!.ToLower().Contains(value)).ToListTryAsync();
 
-            return values.Select(c => c.To<CountryDto>());
+            return (values ?? new()).Select(c => c.To<CountryDto>());
         }
     }
 }

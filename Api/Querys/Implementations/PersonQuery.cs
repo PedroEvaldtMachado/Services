@@ -1,9 +1,9 @@
 ﻿using Api.Domain.Entities.Persons;
 using Api.Dtos;
 using Api.Dtos.Persons;
+using Api.Infra;
 using Api.Infra.Enums;
 using Api.Mappers;
-using MongoDB.Driver;
 
 namespace Api.Querys.Implementations
 {
@@ -13,7 +13,7 @@ namespace Api.Querys.Implementations
         {
         }
 
-        public IEnumerable<EnumDto> GetAllPersonDetailTypes() 
+        public IEnumerable<EnumDto> GetAllPersonDetailTypes()
         {
             var values = Enum.GetValues<PersonDetailType>()
                 .Select(e => new EnumDto { Id = (int)e, Name = e.ToString() });
@@ -26,10 +26,9 @@ namespace Api.Querys.Implementations
             value ??= string.Empty;
             value = value.ToLower();
 
-            var query = await Collection.FindAsync(c => c.Name!.ToLower().Contains(value) || c.Username!.ToLower().Contains(value));
-            var values = await query.ToListAsync();
+            var values = await Queryable.Where(c => c.Name!.ToLower().Contains(value) || c.Username!.ToLower().Contains(value)).ToListTryAsync();
 
-            return values.Select(c => c.To<PersonDto>());
+            return (values ?? new()).Select(c => c.To<PersonDto>());
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Api.Dtos
         [MapperIgnore]
         public object? Value { get { return ValueOrDefault; } }
 
-        public DefaultResultDto() 
+        public DefaultResultDto()
         {
             Successes = new List<ISuccess>();
             Errors = new List<IError>();

@@ -1,31 +1,28 @@
-﻿using Api.Domain.Entities;
-using Api.Domain;
-using MongoDB.Driver;
-using Api.Domain.Implementations;
+﻿using Api.Domain;
+using Api.Domain.Entities;
 using Api.Dtos;
+using Api.Infra;
 using Api.Mappers;
-using System.Collections.Immutable;
-using System.Collections.Generic;
+using MongoDB.Driver;
 
 namespace Api.Querys.Implementations
 {
-    public class BaseQuery<E, D> : IQuery<E, D> 
+    public class BaseQuery<E, D> : IQuery<E, D>
         where E : BaseEntity
         where D : BaseDto
     {
-        protected readonly IMongoCollection<E> Collection;
+        private readonly IDbContext _dbContext;
 
-        public BaseQuery(BaseQueryParams baseParams)
+        public IQueryable<E> Queryable { get { return _dbContext.Queryable<E>(); } }
+
+        public BaseQuery(BaseQueryParams queryParams)
         {
-            Collection = baseParams.ServiceProvider.GetRequiredService<IDbContext>().GetCollection<E>();
+            _dbContext = queryParams.DbContext;
         }
 
         protected async Task<E?> GetEntityById(long id)
         {
-            var entAsync = await Collection.FindAsync(d => d.Id == id);
-            var ent = await entAsync.FirstOrDefaultAsync();
-
-            return ent;
+            return await Queryable.FirstOrDefaultTryAsync(d => d.Id == id);
         }
 
         public async Task<D?> GetById(long id)
@@ -40,9 +37,9 @@ namespace Api.Querys.Implementations
             return Mapper.Map<E, D?>(ent);
         }
 
-        public async Task<ICollection<D>?> GetAll()
+        public async Task<ICollection<D>> GetAll()
         {
-            var list = await Collection.AsQueryable().ToListAsync();
+            var list = await Queryable.ToListTryAsync();
 
             if (list is null)
             {
@@ -55,13 +52,13 @@ namespace Api.Querys.Implementations
 
     public class BaseQueryParams
     {
-        private readonly Lazy<IServiceProvider> _serviceProvider;
+        private readonly Lazy<IDbContext> _dbContext;
 
-        public IServiceProvider ServiceProvider { get { return _serviceProvider.Value; } }
+        public IDbContext DbContext { get { return _dbContext.Value; } }
 
-        public BaseQueryParams(Lazy<IServiceProvider> serviceProvider)
+        public BaseQueryParams(Lazy<IDbContext> dbContext)
         {
-            _serviceProvider = serviceProvider;
+            _dbContext = dbContext;
         }
     }
 }

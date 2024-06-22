@@ -1,7 +1,7 @@
 ﻿using Api.Domain.Entities.Stakeholders;
 using Api.Dtos.Stakeholders;
+using Api.Infra;
 using Api.Mappers;
-using MongoDB.Driver;
 
 namespace Api.Querys.Implementations
 {
@@ -20,17 +20,16 @@ namespace Api.Querys.Implementations
             value = value.ToLower();
 
             var personIds = (await _personQuery.Value.Search(value)).Select(c => c.Id);
+            var values = await Queryable.Where(c => personIds.Contains(c.PersonId)).ToListTryAsync();
 
-            var query = await Collection.FindAsync(c => personIds.Contains(c.PersonId));
-            var values = await query.ToListAsync();
-
-            return values.Select(c => c.To<ContractorDto>());
+            return (values ?? new()).Select(c => c.To<ContractorDto>());
         }
 
-        public async Task<ContractorDto> GetByPersonId(long personId)
+        public async Task<ContractorDto?> GetByPersonId(long personId)
         {
-            var query = await Collection.FindAsync(c => c.PersonId == personId);
-            return Mapper.Map(await query.FirstOrDefaultAsync());
+            var value = await Queryable.Where(c => c.PersonId == personId).FirstOrDefaultTryAsync();
+
+            return value is not null ? Mapper.Map(value) : default;
         }
     }
 }

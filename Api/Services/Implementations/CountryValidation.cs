@@ -1,9 +1,7 @@
-﻿using Api.Domain.Entities.Persons;
-using Api.Dtos.Persons;
+﻿using Api.Dtos.Persons;
 using Api.Infra.Resourses;
 using Api.Querys;
 using FluentResults;
-using System.Linq;
 
 namespace Api.Services.Implementations
 {

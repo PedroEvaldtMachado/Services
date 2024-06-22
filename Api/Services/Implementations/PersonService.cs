@@ -6,7 +6,6 @@ using Api.Mappers;
 using Api.Querys;
 using Api.Repositorys;
 using FluentResults;
-using MongoDB.Driver;
 
 namespace Api.Services.Implementations
 {
@@ -44,7 +43,7 @@ namespace Api.Services.Implementations
 
             var ent = Mapper.Map(dto);
             ent.RegisterDate = DateTimeOffset.UtcNow;
-            await _repository.Value.Collection.InsertOneAsync(ent);
+            await _repository.Value.InsertAsync(ent);
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -63,9 +62,9 @@ namespace Api.Services.Implementations
                 return result;
             }
 
-            var deletes = await _repository.Value.Collection.DeleteOneAsync(e => e.Id == dto.Id);
+            var deletes = await _repository.Value.DeleteAsync(Mapper.Map(dto));
 
-            return result.WithValue(deletes.DeletedCount > 0);
+            return result.WithValue(deletes > 0);
         }
 
         private static Result<PersonDto> ValidateNewPerson(NewPersonDto dto)
@@ -101,7 +100,7 @@ namespace Api.Services.Implementations
         {
             var contractee = await _contracteeQuery.Value.GetByPersonId(dto.Id);
 
-            if (contractee is not null) 
+            if (contractee is not null)
             {
                 return new Result().WithError(Message.Get(15));
             }

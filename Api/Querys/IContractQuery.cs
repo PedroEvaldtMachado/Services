@@ -1,7 +1,5 @@
 ﻿using Api.Domain.Entities.Contracts;
-using Api.Domain.Entities.Stakeholders;
 using Api.Dtos.Contracts;
-using Api.Dtos.Stakeholders;
 
 namespace Api.Querys
 {

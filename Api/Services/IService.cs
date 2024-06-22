@@ -1,5 +1,4 @@
-﻿using Api.Dtos.Persons;
-using FluentResults;
+﻿using FluentResults;
 
 namespace Api.Services
 {

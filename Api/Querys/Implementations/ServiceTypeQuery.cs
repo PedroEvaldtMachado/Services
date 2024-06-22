@@ -1,8 +1,7 @@
 ﻿using Api.Domain.Entities.Services;
-using Api.Dtos;
 using Api.Dtos.Services;
+using Api.Infra;
 using Api.Mappers;
-using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
 namespace Api.Querys.Implementations
@@ -18,10 +17,9 @@ namespace Api.Querys.Implementations
             value ??= string.Empty;
             value = value.ToLower();
 
-            var query = await Collection.FindAsync(c => c.Name!.ToLower().Contains(value) || c.Description!.ToLower().Contains(value));
-            var values = await query.ToListAsync();
+            var values = await Queryable.Where(c => c.Name!.ToLower().Contains(value) || c.Description!.ToLower().Contains(value)).ToListTryAsync();
 
-            return values.Select(c => c.To<ServiceTypeDto>());
+            return (values ?? new()).Select(c => c.To<ServiceTypeDto>());
         }
     }
 }

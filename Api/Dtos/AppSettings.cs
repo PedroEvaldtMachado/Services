@@ -1,4 +1,6 @@
-﻿namespace Api.Dtos
+﻿using Api.Infra.Enums;
+
+namespace Api.Dtos
 {
     public class AppSettings
     {
@@ -9,5 +11,6 @@
     {
         public string? ConnectionStrings { get; set; }
         public string? DatabaseName { get; set; }
+        public DataBaseType DataBaseType { get; set; }
     }
 }

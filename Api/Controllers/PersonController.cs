@@ -1,10 +1,8 @@
-﻿using Api.Dtos.Countrys;
-using Api.Dtos.Persons;
+﻿using Api.Dtos.Persons;
 using Api.Infra;
 using Api.Querys;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 
 namespace Api.Controllers
 {
@@ -58,7 +56,7 @@ namespace Api.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(NewPersonDto dto)
-        { 
+        {
             var person = await _service.Value.Create(dto);
 
             return person.ToCompleteResponse();

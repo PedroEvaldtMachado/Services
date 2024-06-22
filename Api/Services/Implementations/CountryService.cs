@@ -29,7 +29,7 @@ namespace Api.Services.Implementations
                 return result;
             }
 
-            result.WithErrors((await DuplicateValidation(newDto)).Errors);
+            result.WithErrors(DuplicateValidation(newDto).Errors);
 
             if (result.IsFailed)
             {
@@ -38,7 +38,7 @@ namespace Api.Services.Implementations
 
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
-            await _repository.Value.Collection.InsertOneAsync(ent);
+            await _repository.Value.InsertAsync(ent);
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -50,9 +50,9 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(3));
             }
 
-            var result = await _repository.Value.Collection.DeleteOneAsync(e => e.Id == dto.Id);
+            var result = await _repository.Value.DeleteAsync(Mapper.Map(dto));
 
-            return (result.DeletedCount > 0).ToResult();
+            return (result > 0).ToResult();
         }
 
         public async Task<Result<CountryDto>> AddObligation(ObligationDto obligationDto)
@@ -73,7 +73,7 @@ namespace Api.Services.Implementations
             dto.CountryObligations.Add(Mapper.Map(obligationDto));
 
             var ent = Mapper.Map(dto);
-            await _repository.Value.Collection.ReplaceOneAsync(e => e.Id == ent.Id, ent);
+            await _repository.Value.UpdateAsync(ent);
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -95,25 +95,25 @@ namespace Api.Services.Implementations
             dto.CountryObligations.Remove(dto.CountryObligations.First(o => o.PersonDetailType == obligationDto.PersonDetailType));
 
             var ent = Mapper.Map(dto);
-            await _repository.Value.Collection.ReplaceOneAsync(e => e.Id == ent.Id, ent);
+            await _repository.Value.UpdateAsync(ent);
 
             return result.WithValue(Mapper.Map(ent));
         }
 
-        private async Task<Result<CountryDto>> DuplicateValidation(NewCountryDto dto)
+        private Result<CountryDto> DuplicateValidation(NewCountryDto dto)
         {
             var result = new Result<CountryDto>();
 
-            var existsSameName = await _repository.Value.Collection.FindAsync(e => e.Name == dto.Name);
+            var existsSameName = _repository.Value.Queryable.Any(e => e.Name == dto.Name);
 
-            if (await existsSameName.AnyAsync())
+            if (existsSameName)
             {
                 result.WithError(Message.Get(1));
             }
 
-            var existsSameCode = await _repository.Value.Collection.FindAsync(e => e.Code == dto.Code);
+            var existsSameCode = _repository.Value.Queryable.Any(e => e.Code == dto.Code);
 
-            if (await existsSameCode.AnyAsync())
+            if (existsSameCode)
             {
                 result.WithError(Message.Get(2));
             }

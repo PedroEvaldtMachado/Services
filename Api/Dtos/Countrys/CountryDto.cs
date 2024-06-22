@@ -8,8 +8,8 @@
 
         public ICollection<CountryObligationsDto> CountryObligations { get; set; }
 
-        public CountryDto() 
-        { 
+        public CountryDto()
+        {
             CountryObligations = new List<CountryObligationsDto>();
         }
     }

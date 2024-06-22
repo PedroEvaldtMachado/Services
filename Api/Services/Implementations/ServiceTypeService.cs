@@ -29,7 +29,7 @@ namespace Api.Services.Implementations
                 return result;
             }
 
-            result.WithErrors((await DuplicateValidation(newDto)).Errors);
+            result.WithErrors(DuplicateValidation(newDto).Errors);
 
             if (result.IsFailed)
             {
@@ -38,7 +38,7 @@ namespace Api.Services.Implementations
 
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
-            await _repository.Value.Collection.InsertOneAsync(ent);
+            await _repository.Value.InsertAsync(ent);
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -50,17 +50,17 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(3));
             }
 
-            var result = await _repository.Value.Collection.DeleteOneAsync(e => e.Id == dto.Id);
+            var result = await _repository.Value.DeleteAsync(Mapper.Map(dto));
 
-            return (result.DeletedCount > 0).ToResult();
+            return (result > 0).ToResult();
         }
 
-        private async Task<Result<ServiceTypeDto>> DuplicateValidation(NewServiceTypeDto dto)
+        private Result<ServiceTypeDto> DuplicateValidation(NewServiceTypeDto dto)
         {
             var result = new Result<ServiceTypeDto>();
-            var existsSameName = await _repository.Value.Collection.FindAsync(e => e.Name == dto.Name);
+            var existsSameName = _repository.Value.Queryable.Any(e => e.Name == dto.Name);
 
-            if (await existsSameName.AnyAsync())
+            if (existsSameName)
             {
                 result.WithError(Message.Get(16));
             }
