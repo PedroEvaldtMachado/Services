@@ -3,20 +3,28 @@ using Api.Dtos.Stakeholders;
 using Api.Infra;
 using Api.Infra.Resourses;
 using Api.Mappers;
+using Api.Querys;
 using Api.Repositorys;
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Services.Implementations
 {
-    public class ContracteeService : IContracteeService
+    public class ContracteeService : BaseService, IContracteeService
     {
+        private readonly Lazy<IContracteeQuery> _query;
         private readonly Lazy<IRepository<Contractee>> _repository;
         private readonly Lazy<IPersonService> _personService;
 
-        public ContracteeService(Lazy<IRepository<Contractee>> repository, Lazy<IPersonService> personService)
+        public ContracteeService(
+            BaseServiceParams baseServiceParams,
+            Lazy<IRepository<Contractee>> repository,
+            Lazy<IPersonService> personService,
+            Lazy<IContracteeQuery> contracteeQuery) : base(baseServiceParams)
         {
             _repository = repository;
             _personService = personService;
+            _query = contracteeQuery;
         }
 
         public async Task<Result<ContracteeDto>> Create(NewContracteeDto newDto)
@@ -49,6 +57,7 @@ namespace Api.Services.Implementations
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
             await _repository.Value.InsertAsync(ent);
+            await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -61,9 +70,11 @@ namespace Api.Services.Implementations
             }
 
 
-            var result = await _repository.Value.DeleteAsync(Mapper.Map(dto));
+            _repository.Value.Delete(Mapper.Map(dto));
 
-            return (result > 0).ToResult();
+            var count = await Context.Value.SaveChangesAsync();
+
+            return (count > 0).ToResult();
         }
 
         public async Task<Result<bool>> DeleteByPerson(long personId)
@@ -80,18 +91,20 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(10));
             }
 
-            var result = await _repository.Value.DeleteAsync(contractee);
+            _repository.Value.Delete(contractee);
 
-            return (result > 0).ToResult();
+            var count = await Context.Value.SaveChangesAsync();
+
+            return (count > 0).ToResult();
         }
 
         private async Task<Result<ContracteeDto>> DuplicateValidation(NewContracteeDto dto)
         {
             var result = new Result();
 
-            var existsWithSamePerson = await _repository.Value.FindAsync(dto.PersonId!.Value);
+            var existsWithSamePerson = await _query.Value.Queryable.AnyAsync(q => q.PersonId == dto.PersonId!.Value);
 
-            if (existsWithSamePerson is not null)
+            if (existsWithSamePerson)
             {
                 result.WithError(Message.Get(9));
             }

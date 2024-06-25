@@ -47,6 +47,15 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        public IActionResult GetAllPersonTypes()
+        {
+            var values = _query.Value.GetAllPersonTypes();
+
+            return values.ToResultResponse();
+        }
+
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult GetAllPersonDetailTypes()
         {
             var values = _query.Value.GetAllPersonDetailTypes();

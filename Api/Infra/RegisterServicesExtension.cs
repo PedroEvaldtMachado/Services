@@ -38,6 +38,7 @@ namespace Api.Infra
 
         private static void AddServices(this IServiceCollection services)
         {
+            services.AddScoped<BaseServiceParams>();
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<ICountryValidation, CountryValidation>();
@@ -50,7 +51,6 @@ namespace Api.Infra
 
         private static void AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped(typeof(RepositoryParams));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
@@ -59,10 +59,10 @@ namespace Api.Infra
             switch (appSettings.ConnectionDatabase.DataBaseType)
             {
                 case DataBaseType.MongoDb:
-                    services.AddScoped<IDbContext, MongoDbContext>();
+                    services.AddDbContext<DatabaseContext, MongoDatabaseContext>();
                     break;
                 case DataBaseType.PostgreSql:
-                    services.AddDbContext<IDbContext, PostgreDbContext>();
+                    services.AddDbContext<DatabaseContext, PostgreDatabaseContext>();
                     break;
                 default:
                     break;

@@ -11,13 +11,13 @@ namespace Api.Querys.Implementations
         where E : BaseEntity
         where D : BaseDto
     {
-        private readonly IDbContext _dbContext;
+        private readonly Lazy<DatabaseContext> Context;
 
-        public IQueryable<E> Queryable { get { return _dbContext.Queryable<E>(); } }
+        public IQueryable<E> Queryable { get { return Context.Value.Queryable<E>(true); } }
 
         public BaseQuery(BaseQueryParams queryParams)
         {
-            _dbContext = queryParams.DbContext;
+            Context = queryParams.DatabaseContext;
         }
 
         protected async Task<E?> GetEntityById(long id)
@@ -52,13 +52,11 @@ namespace Api.Querys.Implementations
 
     public class BaseQueryParams
     {
-        private readonly Lazy<IDbContext> _dbContext;
+        public Lazy<DatabaseContext> DatabaseContext { get; init; }
 
-        public IDbContext DbContext { get { return _dbContext.Value; } }
-
-        public BaseQueryParams(Lazy<IDbContext> dbContext)
+        public BaseQueryParams(Lazy<DatabaseContext> databaseContext)
         {
-            _dbContext = dbContext;
+            DatabaseContext = databaseContext;
         }
     }
 }

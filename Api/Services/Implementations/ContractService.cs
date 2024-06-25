@@ -8,11 +8,13 @@ using FluentResults;
 
 namespace Api.Services.Implementations
 {
-    public class ContractService : IContractService
+    public class ContractService : BaseService, IContractService
     {
         private readonly Lazy<IRepository<Contract>> _repository;
 
-        public ContractService(Lazy<IRepository<Contract>> repository)
+        public ContractService(
+            BaseServiceParams baseServiceParams,
+            Lazy<IRepository<Contract>> repository) : base(baseServiceParams)
         {
             _repository = repository;
         }
@@ -31,6 +33,7 @@ namespace Api.Services.Implementations
             var ent = Mapper.Map(dto);
 
             await _repository.Value.InsertAsync(ent);
+            await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -128,7 +131,8 @@ namespace Api.Services.Implementations
         {
             var ent = Mapper.Map(dto);
 
-            await _repository.Value.UpdateAsync(ent);
+            _repository.Value.Update(ent);
+            await Context.Value.SaveChangesAsync();
 
             return Mapper.Map(ent);
         }

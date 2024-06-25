@@ -9,12 +9,15 @@ using MongoDB.Driver;
 
 namespace Api.Services.Implementations
 {
-    public class ServiceTypeService : IServiceTypeService
+    public class ServiceTypeService : BaseService, IServiceTypeService
     {
         private readonly Lazy<IRepository<ServiceType>> _repository;
         private readonly Lazy<IServiceTypeQuery> _query;
 
-        public ServiceTypeService(Lazy<IServiceTypeQuery> query, Lazy<IRepository<ServiceType>> repository)
+        public ServiceTypeService(
+            BaseServiceParams baseServiceParams,
+            Lazy<IServiceTypeQuery> query,
+            Lazy<IRepository<ServiceType>> repository) : base(baseServiceParams)
         {
             _query = query;
             _repository = repository;
@@ -39,6 +42,7 @@ namespace Api.Services.Implementations
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
             await _repository.Value.InsertAsync(ent);
+            await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -50,15 +54,16 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(3));
             }
 
-            var result = await _repository.Value.DeleteAsync(Mapper.Map(dto));
+            _repository.Value.Delete(Mapper.Map(dto));
+            var count = await Context.Value.SaveChangesAsync();
 
-            return (result > 0).ToResult();
+            return (count > 0).ToResult();
         }
 
         private Result<ServiceTypeDto> DuplicateValidation(NewServiceTypeDto dto)
         {
             var result = new Result<ServiceTypeDto>();
-            var existsSameName = _repository.Value.Queryable.Any(e => e.Name == dto.Name);
+            var existsSameName = _query.Value.Queryable.Any(e => e.Name == dto.Name);
 
             if (existsSameName)
             {

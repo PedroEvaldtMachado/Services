@@ -2,7 +2,7 @@
 
 namespace Api.Domain.Entities.Contracts
 {
-    public class ContractDetail
+    public class ContractDetail : BaseEntity
     {
         public StakeholderType StakeholderType { get; set; }
 

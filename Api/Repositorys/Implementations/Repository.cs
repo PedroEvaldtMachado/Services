@@ -1,69 +1,50 @@
 ﻿using Api.Domain;
 using Api.Domain.Entities;
-using MongoDB.Driver;
 
 namespace Api.Repositorys.Implementations
 {
     public class Repository<E> : IRepository<E>
         where E : BaseEntity
     {
-        private readonly Lazy<IDbContext> _dbContext;
+        private readonly Lazy<DatabaseContext> Context;
 
-        public IQueryable<E> Queryable { get { return _dbContext.Value.Queryable<E>(); } }
+        public IQueryable<E> Queryable { get { return Context.Value.Queryable<E>(false); } }
 
-        public Repository(Lazy<IDbContext> dbContext)
+        public Repository(Lazy<DatabaseContext> databaseContext)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task<E?> FindAsync(long id)
-        {
-            var ents = await _dbContext.Value.FindAsync<E>(e => e.Id == id);
-            return ents.FirstOrDefault();
+            Context = databaseContext;
         }
 
         public async Task<E> InsertAsync(E ent)
         {
-            await _dbContext.Value.InsertOneAsync(ent);
+            await Context.Value.InsertOneAsync(ent);
             return ent;
         }
 
         public async Task<IEnumerable<E>> InsertAsync(IEnumerable<E> ents)
         {
-            await _dbContext.Value.InsertManyAsync(ents);
+            await Context.Value.InsertManyAsync(ents);
             return ents;
         }
 
-        public async Task<long> UpdateAsync(E ent)
+        public void Update(E ent)
         {
-            return await _dbContext.Value.UpdateOneAsync(ent);
+            Context.Value.UpdateOneAsync(ent);
         }
 
-        public async Task<long> UpdateAsync(IEnumerable<E> ents)
+        public void Update(IEnumerable<E> ents)
         {
-            return await _dbContext.Value.UpdateManyAsync(ents);
+            Context.Value.UpdateManyAsync(ents);
         }
 
-        public async Task<long> DeleteAsync(E ent)
+        public void Delete(E ent)
         {
-            return await _dbContext.Value.DeleteOneAsync<E>(ent);
+            Context.Value.DeleteOneAsync<E>(ent);
         }
 
-        public async Task<long> DeleteAsync(IEnumerable<E> ents)
+        public void Delete(IEnumerable<E> ents)
         {
-            return await _dbContext.Value.DeleteManyAsync<E>(ents);
-        }
-    }
-
-    public class RepositoryParams
-    {
-        private readonly Lazy<IServiceProvider> _serviceProvider;
-
-        public IServiceProvider ServiceProvider { get { return _serviceProvider.Value; } }
-
-        public RepositoryParams(Lazy<IServiceProvider> serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
+            Context.Value.DeleteManyAsync<E>(ents);
         }
     }
 }

@@ -9,12 +9,15 @@ using MongoDB.Driver;
 
 namespace Api.Services.Implementations
 {
-    public class CountryService : ICountryService
+    public class CountryService : BaseService, ICountryService
     {
         private readonly Lazy<IRepository<Country>> _repository;
         private readonly Lazy<ICountryQuery> _query;
 
-        public CountryService(Lazy<ICountryQuery> query, Lazy<IRepository<Country>> repository)
+        public CountryService(
+            BaseServiceParams baseServiceParams,
+            Lazy<ICountryQuery> query,
+            Lazy<IRepository<Country>> repository) : base(baseServiceParams)
         {
             _query = query;
             _repository = repository;
@@ -39,6 +42,7 @@ namespace Api.Services.Implementations
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
             await _repository.Value.InsertAsync(ent);
+            await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -50,9 +54,10 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(3));
             }
 
-            var result = await _repository.Value.DeleteAsync(Mapper.Map(dto));
+            _repository.Value.Delete(Mapper.Map(dto));
+            var count = await Context.Value.SaveChangesAsync();
 
-            return (result > 0).ToResult();
+            return (count > 0).ToResult();
         }
 
         public async Task<Result<CountryDto>> AddObligation(ObligationDto obligationDto)
@@ -73,7 +78,8 @@ namespace Api.Services.Implementations
             dto.CountryObligations.Add(Mapper.Map(obligationDto));
 
             var ent = Mapper.Map(dto);
-            await _repository.Value.UpdateAsync(ent);
+            _repository.Value.Update(ent);
+            await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -95,7 +101,9 @@ namespace Api.Services.Implementations
             dto.CountryObligations.Remove(dto.CountryObligations.First(o => o.PersonDetailType == obligationDto.PersonDetailType));
 
             var ent = Mapper.Map(dto);
-            await _repository.Value.UpdateAsync(ent);
+            _repository.Value.Update(ent);
+
+            var count = await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }

@@ -13,6 +13,14 @@ namespace Api.Querys.Implementations
         {
         }
 
+        public IEnumerable<EnumDto> GetAllPersonTypes()
+        {
+            var values = Enum.GetValues<PersonType>()
+                .Select(e => new EnumDto { Id = (int)e, Name = e.ToString() });
+
+            return values;
+        }
+
         public IEnumerable<EnumDto> GetAllPersonDetailTypes()
         {
             var values = Enum.GetValues<PersonDetailType>()

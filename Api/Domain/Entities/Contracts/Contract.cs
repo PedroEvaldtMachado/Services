@@ -1,4 +1,5 @@
-﻿using Api.Infra.Enums;
+﻿using Api.Domain.Entities.Schedulings;
+using Api.Infra.Enums;
 
 namespace Api.Domain.Entities.Contracts
 {
@@ -22,9 +23,12 @@ namespace Api.Domain.Entities.Contracts
 
         public ICollection<ContractDetail> ContractDetails { get; set; }
 
+        public ICollection<Scheduling> Schedulings { get; set; }
+
         public Contract()
         {
             ContractDetails = new List<ContractDetail>();
+            Schedulings = new List<Scheduling>();
         }
     }
 }

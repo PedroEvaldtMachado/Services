@@ -9,12 +9,15 @@ using MongoDB.Driver;
 
 namespace Api.Services.Implementations
 {
-    public class ContracteeServiceProvideService : IContracteeServiceProvideService
+    public class ContracteeServiceProvideService : BaseService, IContracteeServiceProvideService
     {
         private readonly Lazy<IRepository<ContracteeServiceProvide>> _repository;
         private readonly Lazy<IContracteeServiceProvideQuery> _query;
 
-        public ContracteeServiceProvideService(Lazy<IContracteeServiceProvideQuery> query, Lazy<IRepository<ContracteeServiceProvide>> repository)
+        public ContracteeServiceProvideService(
+            BaseServiceParams baseServiceParams,
+            Lazy<IContracteeServiceProvideQuery> query,
+            Lazy<IRepository<ContracteeServiceProvide>> repository) : base(baseServiceParams)
         {
             _query = query;
             _repository = repository;
@@ -39,6 +42,7 @@ namespace Api.Services.Implementations
             var dto = Mapper.Map(newDto);
             var ent = Mapper.Map(dto);
             await _repository.Value.InsertAsync(ent);
+            await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -50,9 +54,11 @@ namespace Api.Services.Implementations
                 return false.ToResult().WithError(Message.Get(3));
             }
 
-            var result = await _repository.Value.DeleteAsync(Mapper.Map(dto));
+            _repository.Value.Delete(Mapper.Map(dto));
 
-            return (result > 0).ToResult();
+            var count = await Context.Value.SaveChangesAsync();
+
+            return (count > 0).ToResult();
         }
 
         private Result<ContracteeServiceProvideDto> DuplicateValidation(NewContracteeServiceProvideDto dto)

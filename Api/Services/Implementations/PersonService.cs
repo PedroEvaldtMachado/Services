@@ -9,7 +9,7 @@ using FluentResults;
 
 namespace Api.Services.Implementations
 {
-    public class PersonService : IPersonService
+    public class PersonService : BaseService, IPersonService
     {
         private static readonly PersonType[] VALID_PERSON_TYPES = new[] { PersonType.Individual, PersonType.LegalEntity };
 
@@ -17,7 +17,11 @@ namespace Api.Services.Implementations
         private readonly Lazy<ICountryValidation> _countryValidation;
         private readonly Lazy<IContracteeQuery> _contracteeQuery;
 
-        public PersonService(Lazy<IRepository<Person>> repository, Lazy<ICountryValidation> countryValidation, Lazy<IContracteeQuery> contracteeQuery)
+        public PersonService(
+            BaseServiceParams baseServiceParams,
+            Lazy<IRepository<Person>> repository,
+            Lazy<ICountryValidation> countryValidation,
+            Lazy<IContracteeQuery> contracteeQuery) : base(baseServiceParams)
         {
             _repository = repository;
             _countryValidation = countryValidation;
@@ -44,6 +48,7 @@ namespace Api.Services.Implementations
             var ent = Mapper.Map(dto);
             ent.RegisterDate = DateTimeOffset.UtcNow;
             await _repository.Value.InsertAsync(ent);
+            await Context.Value.SaveChangesAsync();
 
             return result.WithValue(Mapper.Map(ent));
         }
@@ -62,9 +67,10 @@ namespace Api.Services.Implementations
                 return result;
             }
 
-            var deletes = await _repository.Value.DeleteAsync(Mapper.Map(dto));
+            _repository.Value.Delete(Mapper.Map(dto));
+            var count = await Context.Value.SaveChangesAsync();
 
-            return result.WithValue(deletes > 0);
+            return (count > 0).ToResult();
         }
 
         private static Result<PersonDto> ValidateNewPerson(NewPersonDto dto)
