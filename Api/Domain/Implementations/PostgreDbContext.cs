@@ -14,7 +14,7 @@ namespace Api.Domain.Implementations
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseNpgsql(_appSettings.Value.ConnectionDatabase.ConnectionStrings);
+            optionsBuilder.UseNpgsql(_appSettings.Value.ConnectionDatabase.ConnectionStrings + $"Database={_appSettings.Value.ConnectionDatabase.DatabaseName};");
         }
     }
 }
