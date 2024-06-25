@@ -14,31 +14,30 @@ namespace Api.Domain.Implementations
         {
             modelBuilder.Entity<Country>(a =>
             {
-                a.Navigation(c => c.CountryObligations).AutoInclude();
-
                 a.HasMany<CountryObligations>(c => c.CountryObligations)
                     .WithOne()
                     .HasForeignKey(c => c.CountryId);
+
+                a.Navigation(c => c.CountryObligations).AutoInclude();
             });
 
             modelBuilder.Entity<Person>(a =>
             {
-                a.Navigation(c => c.PersonDetails).AutoInclude();
-
                 a.HasMany<PersonDetail>(c => c.PersonDetails)
                     .WithOne()
                     .HasForeignKey(c => c.PersonId);
 
                 a.HasOne<Contractee>()
-                    .WithOne()
-                    .IsRequired(false)
+                    .WithOne(c => c.Person)
+                    .IsRequired()
                     .HasForeignKey<Contractee>(c => c.PersonId);
 
                 a.HasOne<Contractor>()
-                    .WithOne()
-                    .IsRequired(false)
+                    .WithOne(c => c.Person)
+                    .IsRequired()
                     .HasForeignKey<Contractor>(c => c.PersonId);
 
+                a.Navigation(c => c.PersonDetails).AutoInclude();
             });
 
             modelBuilder.Entity<Contractee>(a =>
@@ -54,6 +53,10 @@ namespace Api.Domain.Implementations
                 a.HasMany<SchedulingDate>(c => c.SchedulingDates)
                     .WithOne()
                     .HasForeignKey(c => c.ContracteeId);
+
+                a.Navigation(c => c.Person).AutoInclude();
+                a.Navigation(c => c.Schedulings).AutoInclude();
+                a.Navigation(c => c.SchedulingDates).AutoInclude();
             });
 
             modelBuilder.Entity<Contractor>(a =>
@@ -61,6 +64,8 @@ namespace Api.Domain.Implementations
                 a.HasMany<Contract>()
                     .WithOne()
                     .HasForeignKey(c => c.ContractorId);
+
+                a.Navigation(c => c.Person).AutoInclude();
             });
 
             modelBuilder.Entity<ServiceType>(a =>
@@ -79,12 +84,12 @@ namespace Api.Domain.Implementations
 
             modelBuilder.Entity<Contract>(a =>
             {
-                a.Navigation(c => c.ContractDetails).AutoInclude();
-                a.Navigation(c => c.Schedulings).AutoInclude();
-
                 a.HasMany<Scheduling>(c => c.Schedulings)
                     .WithOne()
                     .HasForeignKey(c => c.ContractId);
+
+                a.Navigation(c => c.ContractDetails).AutoInclude();
+                a.Navigation(c => c.Schedulings).AutoInclude();
             });
         }
     }
